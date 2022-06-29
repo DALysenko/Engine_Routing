@@ -1,10 +1,10 @@
 import org.w3c.dom.Document;
-import roads.model.Parsing_Osm;
+import roads.model.ParserOsm;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
-public class Engine_Routing {
+public class EngineRouting {
     public static void main(String[] args) {
 
         File file = new File("NCH.osm");
@@ -17,7 +17,7 @@ public class Engine_Routing {
             return;
         }
 
-        Parsing_Osm parsing_osm = new Parsing_Osm();
-        parsing_osm.Osm(doc);
+        ParserOsm parser = new ParserOsm();
+        parser.parseOsm(doc);
     }
 }
