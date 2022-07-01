@@ -16,8 +16,11 @@ public class EngineRouting {
             System.out.println("Ошибка парсинга" + e.toString());
             return;
         }
-
+        System.out.println(System.currentTimeMillis());
         ParserOsm parser = new ParserOsm();
         parser.parseOsm(doc);
+
+        System.out.println(System.currentTimeMillis());
+
     }
 }
