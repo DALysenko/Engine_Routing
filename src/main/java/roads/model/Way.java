@@ -9,14 +9,14 @@ import java.util.List;
 
 public class Way {
 
-    int id;
+    private long id;
     List<Long> ndList = new ArrayList<>();
 
 
     public Way(Node node) {
         NamedNodeMap nodeMap = node.getAttributes();
         id = Integer.parseInt(nodeMap.getNamedItem("id").getNodeValue());
-        ndList.add((long) id);
+        ndList.add(id);
         NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node interimNode = nodeList.item(i);
@@ -27,5 +27,21 @@ public class Way {
             }
         }
 
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNdList(List<Long> ndList) {
+        this.ndList = ndList;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public List<Long> getNdList() {
+        return ndList;
     }
 }

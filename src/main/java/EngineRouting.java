@@ -9,16 +9,17 @@ public class EngineRouting {
 
         File file = new File("NCH.osm");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newDefaultInstance();
-        Document doc = null;
+        Document doc;
         try {
             doc = dbf.newDocumentBuilder().parse(file);
         } catch (Exception e) {
-            System.out.println("Ошибка парсинга" + e.toString());
+            System.out.println("Ошибка парсинга" + e);
             return;
         }
         System.out.println(System.currentTimeMillis());
         ParserOsm parser = new ParserOsm();
         parser.parseOsm(doc);
+        parser.parseNode(doc);
 
         System.out.println(System.currentTimeMillis());
 
