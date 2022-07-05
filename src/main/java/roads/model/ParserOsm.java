@@ -13,7 +13,8 @@ public class ParserOsm {
 
     Set<String> roadType = Stream.of("motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "living_street", "service").collect(Collectors.toSet());
 
-    Map<Long, Way> wayList = new HashMap<>();
+    Set<Long> waysRefs = new HashSet<>();
+    Set<Way> wayList = new HashSet<>();
     Map<Long, Node> nodesList = new HashMap<>();
 
 
@@ -46,7 +47,8 @@ public class ParserOsm {
                             boolean right_road = roadType.add(v);
                             if (!right_road) {
                                 Way rightRoad = new Way(wayNode);
-                                wayList.put(rightRoad.getId(), rightRoad);
+                                waysRefs.addAll(rightRoad.getNdList());
+                                wayList.add(rightRoad);
                             } else {
                                 roadType.remove(v);
                             }
@@ -55,6 +57,13 @@ public class ParserOsm {
                 }
             }
         }
+    }
+    public void res () {
+        int i = 0;
+        for (Way way:wayList) {
+            i = way.getNdList().size() + i;
+        }
+        System.out.println(i);
     }
 
     public Map<Long, Node> parseNode(Document doc) {
@@ -70,20 +79,15 @@ public class ParserOsm {
             if (osmChilds.item(i).getNodeName().equals("node")) {
                 nodeNode = osmChilds.item(i);
                 NamedNodeMap atributes = nodeNode.getAttributes();
-                String id = atributes.getNamedItem("id").getNodeValue();
-                boolean rightnode = wayList.containsKey(id);
-
+                long id = Long.parseLong(atributes.getNamedItem("id").getNodeValue());
+                boolean rightnode = waysRefs.add(id);
                 if (!rightnode) {
                     Node rightNode = new Node(nodeNode);
                     nodesList.put(rightNode.getId(), rightNode);
                 }
-                else {
-                    wayList.remove(id);
-                }
-
-
             }
         }
         return nodesList;
     }
 }
+
