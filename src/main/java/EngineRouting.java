@@ -20,7 +20,6 @@ public class EngineRouting {
         ParserOsm parser = new ParserOsm();
         parser.parseOsm(doc);
         parser.parseNode(doc);
-        parser.res();
 
         System.out.println(System.currentTimeMillis());
 

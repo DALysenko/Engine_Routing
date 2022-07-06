@@ -2,6 +2,7 @@ package roads.model;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.*;
@@ -15,7 +16,7 @@ public class ParserOsm {
 
     Set<Long> waysRefs = new HashSet<>();
     Set<Way> wayList = new HashSet<>();
-    Map<Long, Node> nodesList = new HashMap<>();
+    Map<Long, NodeOsm> nodesList = new HashMap<>();
 
 
 
@@ -58,18 +59,12 @@ public class ParserOsm {
             }
         }
     }
-    public void res () {
-        int i = 0;
-        for (Way way:wayList) {
-            i = way.getNdList().size() + i;
-        }
-        System.out.println(i);
-    }
 
-    public Map<Long, Node> parseNode(Document doc) {
+
+    public Map<Long, NodeOsm> parseNode(Document doc) {
         org.w3c.dom.Node osmNode = doc.getFirstChild();
         NodeList osmChilds = osmNode.getChildNodes();
-        org.w3c.dom.Node nodeNode;
+
 
         for (int i = 0; i < osmChilds.getLength(); i++) {
             if (osmChilds.item(i).getNodeType() != org.w3c.dom.Node.ELEMENT_NODE) {
@@ -77,17 +72,23 @@ public class ParserOsm {
             }
 
             if (osmChilds.item(i).getNodeName().equals("node")) {
-                nodeNode = osmChilds.item(i);
+                Node nodeNode = osmChilds.item(i);
                 NamedNodeMap atributes = nodeNode.getAttributes();
-                long id = Long.parseLong(atributes.getNamedItem("id").getNodeValue());
-                boolean rightnode = waysRefs.add(id);
+                long nodeId = Long.parseLong(atributes.getNamedItem("id").getNodeValue());
+                boolean rightnode = waysRefs.add(nodeId);
                 if (!rightnode) {
-                    Node rightNode = new Node(nodeNode);
-                    nodesList.put(rightNode.getId(), rightNode);
+                    double lat = Double.parseDouble(atributes.getNamedItem("lat").getNodeValue());
+                    double lon = Double.parseDouble(atributes.getNamedItem("lon").getNodeValue());
+                    NodeOsm rightNodeOsm = new NodeOsm(lat, lon);
+                    nodesList.put(nodeId, rightNodeOsm);
+                }
+                else {
+                    waysRefs.remove(nodeId);
                 }
             }
         }
         return nodesList;
     }
+
 }
 
