@@ -7,7 +7,7 @@ import java.io.File;
 public class EngineRouting {
     public static void main(String[] args) {
 
-        File file = new File("NCH.osm");
+        File file = new File("N-CH.osm");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newDefaultInstance();
         Document doc;
         try {

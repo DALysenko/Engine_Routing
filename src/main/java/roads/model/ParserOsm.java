@@ -17,6 +17,7 @@ public class ParserOsm {
     Set<Long> waysRefs = new HashSet<>();
     Set<Way> wayList = new HashSet<>();
     Map<Long, NodeOsm> nodesList = new HashMap<>();
+    Set<Long> crossroads = new HashSet<>();
 
 
 
@@ -60,7 +61,6 @@ public class ParserOsm {
         }
     }
 
-
     public Map<Long, NodeOsm> parseNode(Document doc) {
         org.w3c.dom.Node osmNode = doc.getFirstChild();
         NodeList osmChilds = osmNode.getChildNodes();
@@ -81,6 +81,17 @@ public class ParserOsm {
                     double lon = Double.parseDouble(atributes.getNamedItem("lon").getNodeValue());
                     NodeOsm rightNodeOsm = new NodeOsm(lat, lon);
                     nodesList.put(nodeId, rightNodeOsm);
+
+                    int k = 0;
+                    for (Way way: wayList) {
+                        if (way.getNdList().contains(nodeId)) {
+                            k++;
+                        }
+                        if (k > 1) {
+                            crossroads.add(nodeId);
+                            break;
+                        }
+                    }
                 }
                 else {
                     waysRefs.remove(nodeId);
