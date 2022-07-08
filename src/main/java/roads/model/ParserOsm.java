@@ -75,27 +75,27 @@ public class ParserOsm {
             if (osmChilds.item(i).getNodeName().equals("node")) {
                 Node nodeNode = osmChilds.item(i);
                 NamedNodeMap atributes = nodeNode.getAttributes();
-                long nodeId = Long.parseLong(atributes.getNamedItem("id").getNodeValue());
-                boolean rightnode = waysRefs.add(nodeId);
+                long id = Long.parseLong(atributes.getNamedItem("id").getNodeValue());
+                boolean rightnode = waysRefs.add(id);
                 if (!rightnode) {
                     double lat = Double.parseDouble(atributes.getNamedItem("lat").getNodeValue());
                     double lon = Double.parseDouble(atributes.getNamedItem("lon").getNodeValue());
-                    NodeOsm rightNodeOsm = new NodeOsm(lat, lon);
-                    nodesList.put(nodeId, rightNodeOsm);
+                    NodeOsm rightNodeOsm = new NodeOsm(id, lat, lon);
+                    nodesList.put(id, rightNodeOsm);
 
                     int k = 0;
                     for (Way way: wayList) {
-                        if (way.getNdList().contains(nodeId)) {
+                        if (way.getNdList().contains(id)) {
                             k++;
                         }
                         if (k > 1) {
-                            crossroads.add(nodeId);
+                            crossroads.add(id);
                             break;
                         }
                     }
                 }
                 else {
-                    waysRefs.remove(nodeId);
+                    waysRefs.remove(id);
                 }
             }
         }
